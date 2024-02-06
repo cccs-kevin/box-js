@@ -303,7 +303,11 @@ module.exports = {
         };
 
         // Save the new file contents.
+    log("info", `About to save the file ${filePath} with the contents: '${content}'.`)
 	fs.writeFileSync(filePath, content);
+    log("info", `Saved the file ${filePath} with the contents: '${content}'.`)
+    const file_contents = fs.readFileSync(filePath, 'utf-8');
+    log("info", file_contents);
 
         // Don't spam lots of file write info to same file.
         if (typeof(fileWriteCount[filePath]) == "undefined") fileWriteCount[filePath] = 0;
@@ -312,6 +316,7 @@ module.exports = {
         let filetype = "";
 	if (doLog) {
             log("info", `Saved ${filePath} (${content.length} bytes)`);
+	    log("info", child_process.execSync("ls -la" + JSON.stringify(filePath)).toString("utf8"));
 	    filetype = child_process.execSync("file " + JSON.stringify(filePath)).toString("utf8");
 	    filetype = filetype.replace(`${filePath}: `, "").replace("\n", "");
             log("info", `${filePath} has been detected as ${filetype}.`);
